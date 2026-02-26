@@ -44,11 +44,21 @@ export class WebHaptics {
       this.ensureDOM();
       if (!this.hapticLabel) return;
 
+      const TOGGLE_INTERVAL = 50;
+
       for (let i = 0; i < pattern.length; i++) {
         if (i % 2 === 0) {
-          this.hapticLabel.click();
+          const duration = pattern[i]!;
+          const toggleCount = Math.max(1, Math.floor(duration / TOGGLE_INTERVAL));
+          const interval = duration / toggleCount;
+
+          for (let t = 0; t < toggleCount; t++) {
+            this.hapticLabel.click();
+            await new Promise((resolve) => setTimeout(resolve, interval));
+          }
+        } else {
+          await new Promise((resolve) => setTimeout(resolve, pattern[i]));
         }
-        await new Promise((resolve) => setTimeout(resolve, pattern[i]));
       }
     }
   }
