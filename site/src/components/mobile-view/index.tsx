@@ -40,7 +40,7 @@ const frameworks = [
   },
 ];
 
-export default function Home() {
+export default function MobileView() {
   const { debug, setDebug } = useApp();
   const { trigger } = useWebHaptics({ debug });
 
