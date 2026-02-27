@@ -16,7 +16,7 @@ export const useApp = () => {
 };
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
-  const [debug, setDebug] = useState(import.meta.env.DEV);
+  const [debug, setDebug] = useState(() => !("ontouchstart" in window));
 
   return (
     <AppContext.Provider value={{ debug, setDebug }}>
