@@ -5,15 +5,5 @@
   inset: 0;
   pointer-events: none;
   user-select: none;
-}
-
-.particle {
-  z-index: 214748365;
-  pointer-events: none;
-  position: absolute;
-  will-change: transform;
-  transform-origin: center;
-
-  width: 1em;
-  height: 1em;
+  contain: strict;
 }
