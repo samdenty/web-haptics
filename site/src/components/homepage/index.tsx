@@ -143,7 +143,7 @@ export default function Home() {
             <CodeBlock
               code={`import { useWebHaptics } from '${frameworks[frameworkIndex % frameworks.length].entrypoint}';
 
-${populateExample(frameworks[frameworkIndex % frameworks.length].example, "")}`}
+${populateExample(frameworks[frameworkIndex % frameworks.length].example)}`}
             />
           </div>
         </section>
