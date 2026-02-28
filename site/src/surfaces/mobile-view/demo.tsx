@@ -72,18 +72,9 @@ export const Demo = ({
                 handleTrigger(name, pattern, e.clientX, e.clientY);
               }}
               onPointerDown={(e) => {
-                handleTrigger(name, pattern, e.clientX, e.clientY);
-              }}
-              onMouseDown={(e) => {
-                handleTrigger(name, pattern, e.clientX, e.clientY);
-              }}
-              onTouchStart={(e) => {
-                handleTrigger(
-                  name,
-                  pattern,
-                  e.touches[0].clientX,
-                  e.touches[0].clientY,
-                );
+                setTimeout(() => {
+                  handleTrigger(name, pattern, e.clientX, e.clientY);
+                }, 100);
               }}
             >
               <span>{name.charAt(0).toUpperCase() + name.slice(1)}</span>
