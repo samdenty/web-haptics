@@ -41,11 +41,8 @@ export default function MobileView({
       <div className={styles.container}>
         <div className={styles.header}>
           <button
-            onClick={() => {
+            onPointerDownCapture={() => {
               trigger();
-              setTimeout(() => {
-                trigger("buzz");
-              }, 1000);
             }}
             className={styles.logoButton}
           >
