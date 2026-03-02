@@ -3,66 +3,66 @@ import type { HapticPreset } from "./types";
 export const defaultPatterns = {
   // --- Notification (UINotificationFeedbackGenerator) ---
   success: {
+    // ascending double-tap indicating success.
     pattern: [
       { duration: 30, intensity: 0.5 },
       { delay: 60, duration: 40, intensity: 1 },
     ],
-    description: "Ascending double-tap indicating success.",
   },
   warning: {
+    // two taps with hesitation indicating a warning.
     pattern: [
       { duration: 40, intensity: 0.8 },
       { delay: 100, duration: 40, intensity: 0.6 },
     ],
-    description: "Two taps with hesitation indicating a warning.",
   },
   error: {
+    // three rapid harsh taps indicating an error.
     pattern: [
       { duration: 40, intensity: 0.9 },
       { delay: 40, duration: 40, intensity: 0.9 },
       { delay: 40, duration: 40, intensity: 0.9 },
     ],
-    description: "Three rapid harsh taps indicating an error.",
   },
 
   // --- Impact (UIImpactFeedbackGenerator) ---
   light: {
+    // single light tap indicating a minor impact.
     pattern: [{ duration: 15, intensity: 0.4 }],
-    description: "Subtle light tap for minor interactions.",
   },
   medium: {
+    // moderate tap for standard interactions.
     pattern: [{ duration: 25, intensity: 0.7 }],
-    description: "Moderate tap for standard interactions.",
   },
   heavy: {
+    // strong tap for significant interactions.
     pattern: [{ duration: 35, intensity: 1 }],
-    description: "Strong tap for significant interactions.",
   },
   soft: {
+    // soft, cushioned tap with a rounded feel.
     pattern: [{ duration: 40, intensity: 0.5 }],
-    description: "Soft, cushioned tap with a rounded feel.",
   },
   rigid: {
+    // hard, crisp tap with a precise feel.
     pattern: [{ duration: 10, intensity: 1 }],
-    description: "Hard, crisp tap with a precise feel.",
   },
 
   // --- Selection (UISelectionFeedbackGenerator) ---
   selection: {
+    // subtle tap for selection changes.
     pattern: [{ duration: 8, intensity: 0.3 }],
-    description: "Ultra-light tick for selection changes.",
   },
 
   // --- Custom ---
   nudge: {
+    // two quick taps with a pause, indicating a nudge or reminder.
     pattern: [
       { duration: 80, intensity: 0.8 },
       { delay: 80, duration: 50, intensity: 0.3 },
     ],
-    description: "A series of taps indicating a nudge.",
   },
   buzz: {
+    // rapid, low-intensity taps creating a buzzing effect.
     pattern: [{ duration: 1000, intensity: 1 }],
-    description: "A long vibration.",
   },
 } as const satisfies Record<string, HapticPreset>;

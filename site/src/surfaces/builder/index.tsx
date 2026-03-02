@@ -8,6 +8,7 @@ import { useHaptics } from "../../hooks/useHaptics";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { CodeBlock } from "../../components/codeblock";
 import { Button } from "../../components/button";
+import { HorizontalScroll } from "../../components/horizontal-scroll";
 
 // --- Types ---
 
@@ -515,26 +516,28 @@ export const HapticBuilder = () => {
   return (
     <div ref={builderRef} className={styles.builder}>
       <div className={styles.header}>
-        {/* Presets */}
-        <div className={styles.presets}>
-          {presets.map(([name, preset]) => (
-            <button
-              key={name}
-              data-pattern={name}
-              data-active={activePreset === name}
-              onClick={() => {
-                if (activePreset === name) return;
-                trigger();
-                dispatch({
-                  type: "LOAD_PRESET",
-                  taps: patternToTaps(preset.pattern, 0.5),
-                });
-              }}
-            >
-              {name.charAt(0).toUpperCase() + name.slice(1)}
-            </button>
-          ))}
-        </div>
+        <HorizontalScroll>
+          {/* Presets */}
+          <div className={styles.presets}>
+            {presets.map(([name, preset]) => (
+              <button
+                key={name}
+                data-pattern={name}
+                data-active={activePreset === name}
+                onClick={() => {
+                  if (activePreset === name) return;
+                  trigger();
+                  dispatch({
+                    type: "LOAD_PRESET",
+                    taps: patternToTaps(preset.pattern, 0.5),
+                  });
+                }}
+              >
+                {name.charAt(0).toUpperCase() + name.slice(1)}
+              </button>
+            ))}
+          </div>
+        </HorizontalScroll>
         <div className={styles.controls}>
           {totalDuration > 0 && (
             <span className={styles.totalDuration}>{totalDuration}ms</span>

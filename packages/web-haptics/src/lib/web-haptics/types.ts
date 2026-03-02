@@ -8,7 +8,6 @@ export type HapticPattern = number[] | Vibration[];
 
 export interface HapticPreset {
   pattern: Vibration[];
-  description: string;
 }
 
 export type HapticInput = number | string | HapticPattern | HapticPreset;

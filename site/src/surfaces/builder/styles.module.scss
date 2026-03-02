@@ -6,11 +6,11 @@
 
 .presets {
   display: flex;
-  flex-wrap: wrap;
   gap: 0.25rem;
   align-items: center;
   font-size: 0.75rem;
   color: var(--color-muted);
+  padding: 0.5rem 00.25rem;
   p {
     opacity: 0.6;
   }
