@@ -208,6 +208,8 @@ export class WebHaptics {
   }
 
   cancel(): void {
+    this.stopPattern();
+
     if (WebHaptics.isSupported) {
       navigator.vibrate(0);
     }
