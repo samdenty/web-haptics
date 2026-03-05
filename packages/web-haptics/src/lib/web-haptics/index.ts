@@ -1,3 +1,4 @@
+import 'ios-vibrator-pro-max'
 import { defaultPatterns } from "./patterns";
 import type {
   HapticInput,
@@ -8,7 +9,6 @@ import type {
 
 const TOGGLE_MIN = 16; // ms at intensity 1 (every frame)
 const TOGGLE_MAX = 184; // range above min (0.5 intensity ≈ 100ms)
-const MAX_PHASE_MS = 1000; // browser haptic window limit
 const PWM_CYCLE = 20; // ms per intensity modulation cycle
 
 /** Convert any HapticInput into a Vibration array. */
@@ -134,11 +134,7 @@ function toVibratePattern(
 let instanceCounter = 0;
 
 export class WebHaptics {
-  private hapticLabel: HTMLLabelElement | null = null;
-  private domInitialized = false;
-  private instanceId: number;
   private debug: boolean;
-  private showSwitch: boolean;
   private rafId: number | null = null;
   private patternResolve: (() => void) | null = null;
   private audioCtx: AudioContext | null = null;
@@ -147,9 +143,7 @@ export class WebHaptics {
   private audioBuffer: AudioBuffer | null = null;
 
   constructor(options?: WebHapticsOptions) {
-    this.instanceId = ++instanceCounter;
     this.debug = options?.debug ?? false;
-    this.showSwitch = options?.showSwitch ?? false;
   }
 
   static readonly isSupported: boolean =
@@ -172,7 +166,6 @@ export class WebHaptics {
 
     // Validate and clamp durations
     for (const vib of vibrations) {
-      if (vib.duration > MAX_PHASE_MS) vib.duration = MAX_PHASE_MS;
       if (
         !Number.isFinite(vib.duration) ||
         vib.duration < 0 ||
@@ -190,15 +183,8 @@ export class WebHaptics {
       navigator.vibrate(toVibratePattern(vibrations, defaultIntensity));
     }
 
-    if (!WebHaptics.isSupported || this.debug) {
-      this.ensureDOM();
-      if (!this.hapticLabel) return;
-
-      if (this.debug) {
-        await this.ensureAudio();
-      }
-
-      this.stopPattern();
+    if (this.debug) {
+      await this.ensureAudio();
 
       const firstDelay = vibrations[0]?.delay ?? 0;
       const firstClickFired = firstDelay === 0;
@@ -206,7 +192,6 @@ export class WebHaptics {
       // Fire first click synchronously to stay within user gesture context
       // (only when the first vibration has no delay)
       if (firstClickFired) {
-        this.hapticLabel.click();
         if (this.debug && this.audioCtx) {
           const firstIntensity = Math.max(
             0,
@@ -221,7 +206,6 @@ export class WebHaptics {
   }
 
   cancel(): void {
-    this.stopPattern();
     if (WebHaptics.isSupported) {
       navigator.vibrate(0);
     }
@@ -229,11 +213,7 @@ export class WebHaptics {
 
   destroy(): void {
     this.stopPattern();
-    if (this.hapticLabel) {
-      this.hapticLabel.remove();
-      this.hapticLabel = null;
-      this.domInitialized = false;
-    }
+
     if (this.audioCtx) {
       this.audioCtx.close();
       this.audioCtx = null;
@@ -251,15 +231,6 @@ export class WebHaptics {
       this.audioFilter = null;
       this.audioGain = null;
       this.audioBuffer = null;
-    }
-  }
-
-  setShowSwitch(show: boolean): void {
-    this.showSwitch = show;
-    if (this.hapticLabel) {
-      const checkbox = this.hapticLabel.querySelector("input");
-      this.hapticLabel.style.display = show ? "" : "none";
-      if (checkbox) checkbox.style.display = show ? "" : "none";
     }
   }
 
@@ -328,14 +299,12 @@ export class WebHaptics {
           if (lastToggleTime === -1) {
             lastToggleTime = time;
             if (!firstClickFired) {
-              this.hapticLabel?.click();
               if (this.debug && this.audioCtx) {
                 this.playClick(phase.intensity);
               }
               firstClickFired = true;
             }
           } else if (time - lastToggleTime >= toggleInterval) {
-            this.hapticLabel?.click();
             if (this.debug && this.audioCtx) {
               this.playClick(phase.intensity);
             }
@@ -403,44 +372,5 @@ export class WebHaptics {
     if (this.audioCtx?.state === "suspended") {
       await this.audioCtx.resume();
     }
-  }
-
-  private ensureDOM(): void {
-    if (this.domInitialized) return;
-    if (typeof document === "undefined") return;
-
-    const id = `web-haptics-${this.instanceId}`;
-
-    const hapticLabel = document.createElement("label");
-    hapticLabel.setAttribute("for", id);
-    hapticLabel.textContent = "Haptic feedback";
-    hapticLabel.style.position = "fixed";
-    hapticLabel.style.bottom = "10px";
-    hapticLabel.style.left = "10px";
-    hapticLabel.style.padding = "5px 10px";
-    hapticLabel.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-    hapticLabel.style.color = "white";
-    hapticLabel.style.fontFamily = "sans-serif";
-    hapticLabel.style.fontSize = "14px";
-    hapticLabel.style.borderRadius = "4px";
-    hapticLabel.style.zIndex = "9999";
-    hapticLabel.style.userSelect = "none";
-    this.hapticLabel = hapticLabel;
-
-    const hapticCheckbox = document.createElement("input");
-    hapticCheckbox.type = "checkbox";
-    hapticCheckbox.setAttribute("switch", "");
-    hapticCheckbox.id = id;
-    hapticCheckbox.style.all = "initial";
-    hapticCheckbox.style.appearance = "auto";
-
-    if (!this.showSwitch) {
-      hapticLabel.style.display = "none";
-      hapticCheckbox.style.display = "none";
-    }
-
-    hapticLabel.appendChild(hapticCheckbox);
-    document.body.appendChild(hapticLabel);
-    this.domInitialized = true;
   }
 }

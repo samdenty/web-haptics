@@ -1,3 +1,4 @@
+export { enableMainThreadBlocking } from 'ios-vibrator-pro-max'
 export { version } from "./../package.json";
 
 export { WebHaptics } from "./lib/web-haptics";
