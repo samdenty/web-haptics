@@ -11,11 +11,9 @@ npm i web-haptics
 ## Usage
 
 ```tsx
-import { useWebHaptics } from "web-haptics/react";
+import { trigger } from "web-haptics";
 
 function App() {
-  const { trigger } = useWebHaptics();
-
   return <button onClick={() => trigger("success")}>Tap me</button>;
 }
 ```
