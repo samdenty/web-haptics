@@ -188,6 +188,8 @@ export class WebHaptics {
         await this.ensureAudio();
       }
 
+      this.stopPattern();
+
       const firstDelay = vibrations[0]?.delay ?? 0;
       const firstClickFired = firstDelay === 0;
 
