@@ -183,8 +183,10 @@ export class WebHaptics {
       navigator.vibrate(toVibratePattern(vibrations, defaultIntensity));
     }
 
-    if (this.debug) {
-      await this.ensureAudio();
+    if (!WebHaptics.isSupported || this.debug) {
+      if (this.debug) {
+        await this.ensureAudio();
+      }
 
       const firstDelay = vibrations[0]?.delay ?? 0;
       const firstClickFired = firstDelay === 0;
